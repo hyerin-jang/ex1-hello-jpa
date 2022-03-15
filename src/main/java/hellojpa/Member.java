@@ -6,14 +6,16 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
+@SequenceGenerator(name="member_seq_generator", sequenceName = "member_seq")
 public class Member {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="member_seq_generator") // AUTO: db 방언에 따라 자동으로, IDENTITY ,SEQUENCE, TABLE
+    private String id;
 
     @Column(name = "name", updatable = false, nullable = false, unique = true, columnDefinition = "Empty")
     // unique 잘 안씀 >> 이름이 random 생성이라 알아보기 어려움
-    private String username;
+    private Long username;
 
     private Integer age;
 
