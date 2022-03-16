@@ -27,10 +27,8 @@ public class JpaMain {
 //            findMember.setName("HelloJpa");
 
             //JPQL
-            List<Member> result = em.createQuery("select m from Member as m", Member.class)
-                            .getResultList();
-
-            tx.commit();
+//            List<Member> result = em.createQuery("select m from Member as m", Member.class)
+//                            .getResultList();
 
             // 비영속
 //            Member member = new Member();
@@ -75,6 +73,34 @@ public class JpaMain {
 //            System.out.println("==========================");
 //            tx.commit();
 
+            // 저장
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
+
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team);
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            // 조회
+            Member findMember = em.find(Member.class, member.getId());
+            List<Member> members =  findMember.getTeam().getMebers(); // 양방향 연관관계 (mapping)
+            Team fineTeam = findMember.getTeam();
+            System.out.println("findTeam= " + fineTeam.getName());
+
+            for (Member m : members) {
+                System.out.println("m = " + m.getUsername());
+            }
+
+            // 수정
+            Team newTeam =  em.find(Team.class, 100L);
+            findMember.setTeam(newTeam);
+
+            tx.commit();
         } catch (Exception e) {
             tx.rollback();
         } finally {
