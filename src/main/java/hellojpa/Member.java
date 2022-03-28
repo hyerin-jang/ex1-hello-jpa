@@ -72,8 +72,9 @@ public class Member {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void changeTeam(Team team) {
         this.team = team;
+        team.getMembers().add(this);
     }
 
     //    public Long getTeamId() {
@@ -148,6 +149,9 @@ public class Member {
         this.temp = temp;
     }
 
+    public void setTeam(Team team) {
+    }
+
     //    public Member(Long id, String name) {
 //        this.id = id;
 //        this.name = name;
@@ -168,4 +172,22 @@ public class Member {
 //    public void setName(String name) {
 //        this.name = name;
 //    }
+
+// controller 에서는 entity 반환하면 안됨 (entity > dto로 변환해서 반환해야 함. entity 변경시 api spec이 변경되어 버리기 때문에)
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", team=" + team +
+                ", age=" + age +
+                ", roleType=" + roleType +
+                ", createdDate=" + createdDate +
+                ", lastModifiedDate=" + lastModifiedDate +
+                ", testLocalDate=" + testLocalDate +
+                ", testLocalDateTime=" + testLocalDateTime +
+                ", description='" + description + '\'' +
+                ", temp=" + temp +
+                '}';
+    }
 }

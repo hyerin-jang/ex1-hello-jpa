@@ -13,7 +13,12 @@ public class Team {
     private String name;
 
     @OneToMany(mappedBy = "team") // MEMBER class의 team에 mapping 되어 있다는 뜻
-    private List<Member> mebers = new ArrayList<>();
+    private List<Team> members = new ArrayList<>();
+
+    public void addMember(Member member) {
+        member.setTeam(this);
+        members.add(this);
+    }
 
     public Long getId() {
         return id;
@@ -31,11 +36,12 @@ public class Team {
         this.name = name;
     }
 
-    public List<Member> getMebers() {
-        return mebers;
+    public List<Member> getMembers() {
+        return members;
     }
 
-    public void setMebers(List<Member> mebers) {
-        this.mebers = mebers;
+    public void setMembers(List<Team> members) {
+        this.members = members;
     }
+
 }

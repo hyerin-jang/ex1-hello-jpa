@@ -80,15 +80,18 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUsername("member1");
-            member.setTeam(team);
             em.persist(member);
+
+            team.addMember(member);
 
             em.flush();
             em.clear();
 
+            Team findTeam = em.find(Team.class, team.getId()); //1차 캐시에 존대
+
             // 조회
             Member findMember = em.find(Member.class, member.getId());
-            List<Member> members =  findMember.getTeam().getMebers(); // 양방향 연관관계 (mapping)
+            List<Member> members =  findMember.getTeam().getMembers(); // 양방향 연관관계 (mapping)
             Team fineTeam = findMember.getTeam();
             System.out.println("findTeam= " + fineTeam.getName());
 
@@ -98,7 +101,7 @@ public class JpaMain {
 
             // 수정
             Team newTeam =  em.find(Team.class, 100L);
-            findMember.setTeam(newTeam);
+            findMember.changeTeam(newTeam);
 
             tx.commit();
         } catch (Exception e) {
