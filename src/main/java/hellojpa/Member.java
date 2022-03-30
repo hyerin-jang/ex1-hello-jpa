@@ -3,7 +3,9 @@ package hellojpa;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @SequenceGenerator(name="member_seq_generator", sequenceName = "member_seq")
@@ -26,6 +28,10 @@ public class Member {
 //    @Column(name = "name", updatable = false, nullable = false, unique = true, columnDefinition = "Empty")
 //     unique 잘 안씀 >> 이름이 random 생성이라 알아보기 어려움
 //    private Long username;
+
+    @ManyToMany
+    @JoinTable(name = "MEMBER_PRODUCT")
+    private List<Product> products = new ArrayList<>();
 
     private Integer age;
 
