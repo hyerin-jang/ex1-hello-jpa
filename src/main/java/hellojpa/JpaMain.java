@@ -100,8 +100,8 @@ public class JpaMain {
             }
 
             // 수정
-            Team newTeam =  em.find(Team.class, 100L);
-            findMember.changeTeam(newTeam);
+//            Team newTeam =  em.find(Team.class, 100L);
+//            findMember.changeTeam(newTeam);
 
             Movie movie = new Movie();
             movie.setDirector("aaa");
