@@ -91,17 +91,30 @@ public class JpaMain {
 
             // 조회
             Member findMember = em.find(Member.class, member.getId());
-            List<Member> members =  findMember.getTeam().getMembers(); // 양방향 연관관계 (mapping)
+            List<Team> members =  findMember.getTeam().getMembers(); // 양방향 연관관계 (mapping)
             Team fineTeam = findMember.getTeam();
             System.out.println("findTeam= " + fineTeam.getName());
 
-            for (Member m : members) {
-                System.out.println("m = " + m.getUsername());
+            for (Team m : members) {
+                System.out.println("m = " + m.getMembers());
             }
 
             // 수정
             Team newTeam =  em.find(Team.class, 100L);
             findMember.changeTeam(newTeam);
+
+            Movie movie = new Movie();
+            movie.setDirector("aaa");
+            movie.setActor("bbb");
+            movie.setName("avengers");
+            movie.setPrice(10000);
+
+            em.persist(movie);
+
+            em.flush();
+            em.clear();
+
+            Movie findMovie = em.find(Movie.class, movie.getId());
 
             tx.commit();
         } catch (Exception e) {

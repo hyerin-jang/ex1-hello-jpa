@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@SequenceGenerator(name="member_seq_generator", sequenceName = "member_seq")
-public class Member {
+//@SequenceGenerator(name="member_seq_generator", sequenceName = "member_seq")
+public class Member extends BaseEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="member_seq_generator") // AUTO: db 방언에 따라 자동으로, IDENTITY ,SEQUENCE, TABLE
@@ -78,10 +78,10 @@ public class Member {
         return team;
     }
 
-    public void changeTeam(Team team) {
-        this.team = team;
-        team.getMembers().add(this);
-    }
+//    public void changeTeam(Team team) {
+//        this.team = team;
+//        team.getMembers().add(this);
+//    }
 
     //    public Long getTeamId() {
 //        return teamId;
@@ -107,9 +107,9 @@ public class Member {
         this.roleType = roleType;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
+//    public LoDate getCreatedDate() {
+//        return createdDate;
+//    }
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
