@@ -116,6 +116,34 @@ public class JpaMain {
 
             Movie findMovie = em.find(Movie.class, movie.getId());
 
+            //proxy
+            Member member1 = em.find(Member.class, 1L);
+            printMember(member1);
+            printMemberAndTeam(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("hello2");
+
+            Member member3 = new Member();
+            member3.setUsername("hello3");
+
+            em.flush();
+            em.clear();
+
+             Member m1 = em.find(Member.class, member2.getId());
+             Member m2 = em.getReference(Member.class, member3.getId());
+             // type 비교는 절대 == 으로 하면 안됨. instanceOf로!!!!
+            System.out.println("m1 == m2: " + (m1.getClass() == m2.getClass()));
+            System.out.println("m1 == m2: " + (m1 instanceof Member));
+            System.out.println("m1 == m2: " + (m2 instanceof Member));
+
+            Member findMember2 = em.getReference(Member.class, member2.getId());
+//            Member findMember =  em.find(Member.class, member2.getId());
+            System.out.println("before findMember = " + findMember2.getClass());
+            System.out.println("findMemberId = " + findMember2.getId());
+            System.out.println("findMemberUsername = " + findMember2.getUsername());
+            System.out.println("after findMember = " + findMember2.getClass());
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -124,5 +152,17 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void printMember(Member member1) {
+        System.out.println("member = " + member1.getUsername());
+    }
+
+    private static void printMemberAndTeam (Member member1) {
+        String username = member1.getUsername();
+        System.out.println("username = " + username);
+
+        Team team = member1.getTeam();
+        System.out.println("team = " + team.getName());
     }
 }
