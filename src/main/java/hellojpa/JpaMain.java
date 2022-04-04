@@ -1,5 +1,7 @@
 package hellojpa;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -137,6 +139,33 @@ public class JpaMain {
             System.out.println("m1 == m2: " + (m1 instanceof Member));
             System.out.println("m1 == m2: " + (m2 instanceof Member));
 
+            System.out.println("m1 = " + m1.getClass());
+
+            Member reference = em.getReference(Member.class, member1.getId());
+            Member reference1 = em.find(Member.class, member1.getId());
+            System.out.println("reference = " + reference.getClass()); // proxy
+            System.out.println("reference1 = " + reference1.getClass());
+            System.out.println("a == a: " + (m1 == reference));
+            System.out.println("reference == reference1: " + (reference == reference1));
+            // 이미 영속성 컨텍스트에 m1이 캐시로 올라와있음
+            // == 비교가 한 영속성 컨텍스트에서 온거면 true를 반환
+            // proxy에서 한번 호출되면 em.find 해도 proxy 반환
+            // proxy건 아니건 문제없게 개발해야함
+
+            // 프록시 인스턴스 초기화 여부 확인
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(reference));
+
+//            em.clear(); 영속석 컨텍스트 닫거나,
+//            em.detach(reference); 영속성 컨텍스트에서 reference 빼버리면
+//            아래 proxy 초기화 못함 (오류 발생 > org.hibernate.LazyInInitializeException : could not initialize proxy)
+            reference.getUsername(); // proxy 강제 초기화
+
+            // 프록시 강제 초기화 좋은 방법 (JPA 표준에는 강제 초기화 없음)
+            Hibernate.initialize(reference);
+
+            // 프록시 인스턴스 초기화 여부 확인
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(reference));
+
             Member findMember2 = em.getReference(Member.class, member2.getId());
 //            Member findMember =  em.find(Member.class, member2.getId());
             System.out.println("before findMember = " + findMember2.getClass());
@@ -147,6 +176,7 @@ public class JpaMain {
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }
