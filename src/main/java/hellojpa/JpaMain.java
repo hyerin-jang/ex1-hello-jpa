@@ -173,6 +173,25 @@ public class JpaMain {
             System.out.println("findMemberUsername = " + findMember2.getUsername());
             System.out.println("after findMember = " + findMember2.getClass());
 
+            // 지연로딩
+            Team team1 = new Team();
+            team1.setName("teamA");
+            em.persist(team1);
+
+            Member member4 = new Member();
+            member4.setUsername("member4");
+            member4.setTeam(team1);
+
+            em.flush();
+            em.clear();
+
+            Member m = em.find(Member.class, member4.getId());
+            System.out.println("m = " + m.getTeam().getClass()); // team은 porxy로 가져옴
+
+            System.out.println("=================");
+            m.getTeam().getName(); // 이 시점에서 proxy 초기화되고 쿼리 날아감
+            System.out.println("=================");
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();

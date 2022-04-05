@@ -21,7 +21,8 @@ public class Member extends BaseEntity  {
 //    @Column(name = "TEAM_ID")
 //    private Long teamId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // > team을 proxy 객체로 조회. @ManyToOne, @OneToOne 은 꼭 이거 설정 해줄 것!
+//    @ManyToOne(fetch = FetchType.EAGER) // 즉시조회. 실무에선 사용하지 말것!
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
