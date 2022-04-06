@@ -204,6 +204,14 @@ public class JpaMain {
 //            em.persist(child1);
 //            em.persist(child2);
 
+            em.flush();
+            em.clear();
+
+            // orphanRemoval
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0);
+            em.remove(findParent);
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
