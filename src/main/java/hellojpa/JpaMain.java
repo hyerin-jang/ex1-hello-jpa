@@ -192,6 +192,18 @@ public class JpaMain {
             m.getTeam().getName(); // 이 시점에서 proxy 초기화되고 쿼리 날아감
             System.out.println("=================");
 
+            // cascade
+            Child child1 = new Child();
+            Child child2 = new Child();
+
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
+//            em.persist(child1);
+//            em.persist(child2);
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
