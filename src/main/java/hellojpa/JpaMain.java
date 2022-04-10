@@ -212,6 +212,31 @@ public class JpaMain {
             findParent.getChildList().remove(0);
             em.remove(findParent);
 
+            // embedded type의 side effect
+            Address address = new Address("city", "street", "1000");
+
+            Member member5 = new Member();
+            member5.setUsername("member1");
+            member5.setHomeAddress(address);
+            em.persist(member5);
+
+//            Member member6 = new Member();
+//            member6.setUsername("member1");
+//            member6.setHomeAddress(address);
+//            em.persist(member6);
+
+            // side effect 방지
+            Address copyAddress = new Address(address.getCity(), address.getStreet(), address.getZipCode());
+
+            Member member6 = new Member();
+            member6.setUsername("member1");
+            member6.setHomeAddress(copyAddress);
+            em.persist(member6);
+
+            // 불변객체 수정
+            Address newAddress = new Address("NewCity", address.getStreet(), address.getZipCode());
+            member5.setHomeAddress(newAddress);
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();

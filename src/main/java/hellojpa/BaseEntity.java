@@ -2,6 +2,7 @@ package hellojpa;
 
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @MappedSuperclass
 public abstract class BaseEntity {
@@ -19,7 +20,7 @@ public abstract class BaseEntity {
         this.createdBy = createdBy;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
