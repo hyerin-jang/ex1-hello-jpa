@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
 
@@ -236,6 +237,52 @@ public class JpaMain {
             // 불변객체 수정
             Address newAddress = new Address("NewCity", address.getStreet(), address.getZipCode());
             member5.setHomeAddress(newAddress);
+
+            // 값타입 컬렉션
+            Member member7 = new Member();
+            member7.setUsername("member1");
+            member7.setHomeAddress(new Address("home city", "street", "10000"));
+
+            member7.getFavoriteFood().add("치킨");
+            member7.getFavoriteFood().add("족발");
+            member7.getFavoriteFood().add("피자");
+
+//            member7.getAddressesHistory().add(new Address("old1", "street", "10000"));
+//            member7.getAddressesHistory().add(new Address("old2", "street", "10000"));
+
+            em.persist(member7);
+
+            em.flush();
+            em.clear();
+
+            Member findMember3 = em.find(Member.class, member7.getId());
+
+//            List<Address> addressesHistory = findMember3.getAddressesHistory();
+//            for (Address address1 : addressesHistory) {
+//                System.out.println("address = " + address1.getCity());
+//            }
+
+            Set<String> favoriteFoods = findMember3.getFavoriteFood();
+            for (String favoriteFood : favoriteFoods) {
+                System.out.println("favoriteFood = " + favoriteFood);
+            }
+
+            // 값타입 수정 homeCity -> newCity
+            Address a = findMember3.getHomeAddress();
+            findMember3.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipCode()));
+
+            //치킨 -> 한식
+            // string 은 지우고나서 새로 넣어야 함. update 안됨
+            findMember3.getFavoriteFood().remove("치킨");
+            findMember3.getFavoriteFood().add("한식");
+
+            //주소
+//            findMember3.getAddressesHistory().remove(new Address("old1", "street", "10000"));
+//            findMember3.getAddressesHistory().add(new Address("newCity1", "street", "10000"));
+
+            //oneToMany 방식
+            member7.getAddressesHistory().add(new AddressEntity("old1", "street", "10000"));
+            member7.getAddressesHistory().add(new AddressEntity("old2", "street", "10000"));
 
             tx.commit();
         } catch (Exception e) {

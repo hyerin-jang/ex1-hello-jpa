@@ -3,9 +3,7 @@ package hellojpa;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 //@SequenceGenerator(name="member_seq_generator", sequenceName = "member_seq")
@@ -23,6 +21,22 @@ public class Member extends BaseEntity  {
 
     @Embedded
     private Address homeAddress;
+
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOOD", joinColumns =
+        @JoinColumn(name = "MEMBER_ID"))
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFood = new HashSet<>();
+
+//    @ElementCollection
+//    @CollectionTable(name = "ADDRESS", joinColumns =
+//        @JoinColumn(name = "MEMBER_ID"))
+//    private List<Address> addressesHistory = new ArrayList<>();
+
+    // 값타임 컬렉션보단 이걸 사용할 것
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "MEMBER_ID")
+    private List<AddressEntity> addressesHistory = new ArrayList<>();
 
     @Embedded
     @AttributeOverrides({
@@ -231,7 +245,32 @@ public class Member extends BaseEntity  {
 //        this.name = name;
 //    }
 
-// controller 에서는 entity 반환하면 안됨 (entity > dto로 변환해서 반환해야 함. entity 변경시 api spec이 변경되어 버리기 때문에)
+
+    public Set<String> getFavoriteFood() {
+        return favoriteFood;
+    }
+
+    public void setFavoriteFood(Set<String> favoriteFood) {
+        this.favoriteFood = favoriteFood;
+    }
+
+//    public List<Address> getAddressesHistory() {
+//        return addressesHistory;
+//    }
+//
+//    public void setAddressesHistory(List<Address> addressesHistory) {
+//        this.addressesHistory = addressesHistory;
+//    }
+
+    public List<AddressEntity> getAddressesHistory() {
+        return addressesHistory;
+    }
+
+    public void setAddressesHistory(List<AddressEntity> addressesHistory1) {
+        this.addressesHistory = addressesHistory1;
+    }
+
+    // controller 에서는 entity 반환하면 안됨 (entity > dto로 변환해서 반환해야 함. entity 변경시 api spec이 변경되어 버리기 때문에)
     @Override
     public String toString() {
         return "Member{" +
