@@ -18,5 +18,12 @@ public class ValueMain {
 
         System.out.println("a1 = " + a1);
         System.out.println("b1 = " + b1);
+
+        Address address1 = new Address("city", "street", "10000");
+        Address address2 = new Address("city", "street", "10000");
+
+        System.out.println("address1 == address2" + (address1 == address2));
+        // 값타입 비교는 항상 equals 비교 사용
+        System.out.println("address1 equals address2" + (address1.equals(address2)));
     }
 }
